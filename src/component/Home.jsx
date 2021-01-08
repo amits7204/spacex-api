@@ -9,7 +9,7 @@ import { Typography, Button } from "@material-ui/core";
 
 import Pagination from "@material-ui/lab/Pagination";
 
-import { getPayloadData } from "../redux/ActionCreator";
+import { getContactData } from "../redux/ActionCreator";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,15 +26,15 @@ export default function Home() {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  useEffect(() => dispatch(getPayloadData()), [dispatch]);
+  useEffect(() => dispatch(getContactData()), [dispatch]);
   const history = useHistory();
-  const { payloadData, isError } = useSelector((state) => state.spacex);
+  const { contactData, isError } = useSelector((state) => state.contacts);
   const [active, setActive] = useState(1);
 
-  const totalPages = Math.ceil(payloadData.length / 12);
-  let offSet = (active - 1) * 12;
+  const totalPages = Math.ceil(contactData.length / 5);
+  let offSet = (active - 1) * 5;
 
-  console.log("Space: ", payloadData);
+  console.log("Space: ", contactData);
 
   const handlePagination = (e, value) => {
     setActive(value);
@@ -43,26 +43,18 @@ export default function Home() {
   const handleMoreButton = (items) => {
     console.log("ITEMS: ", items);
     const {
-      payload_id,
-      nationality,
-      manufacturer,
-      payload_type,
-      orbit,
-      payload_mass_kg,
-      payload_mass_lbs,
-      reused,
+      _id,
+      first_name,
+      last_name,
+      phone_number,
     } = items;
     history.push({
-      pathname: `/more/${payload_id}`,
+      pathname: `/contactInfo/${_id}`,
       state: {
-        payload_id: payload_id,
-        nationality: nationality,
-        manufacturer: manufacturer,
-        payload_type: payload_type,
-        orbit: orbit,
-        payload_mass_kg: payload_mass_kg,
-        payload_mass_lbs: payload_mass_lbs,
-        reused: reused,
+        _id:_id,
+        first_name: first_name,
+        last_name: last_name,
+        phone_number: phone_number,
       },
     });
   };
@@ -75,38 +67,17 @@ export default function Home() {
     >
       <Grid container spacing={3}>
         {!isError ? (
-          payloadData
-            .filter((item, index) => index >= offSet && index < offSet + 12)
+          contactData && contactData
+            .filter((item, index) => index >= offSet && index < offSet + 5)
             .map((items) => {
               return (
-                <Grid item xs={3} key={items.payload_id}>
+                <Grid item xs={3} key={items._id}>
                   <Typography
                     className={classes.Typography}
                     variant="h4"
-                    align="left"
+                    align="center"
                   >
-                    Payload id:
-                    <small style={{ color: "#004d40", marginLeft: "6px" }}>
-                      {items.payload_id}
-                    </small>
-                  </Typography>
-                  <Typography align="left" className={classes.Typography}>
-                    nationality:
-                    <small style={{ color: "#004d40", marginLeft: "6px" }}>
-                      {items.nationality}
-                    </small>
-                  </Typography>
-                  <Typography className={classes.Typography} align="left">
-                    Manufacturer:
-                    <small style={{ color: "#004d40", marginLeft: "6px" }}>
-                      {items.manufacturer}
-                    </small>
-                  </Typography>
-                  <Typography className={classes.Typography} align="left">
-                    Payload type:
-                    <small style={{ color: "#004d40", marginLeft: "6px" }}>
-                      {items.payload_type}
-                    </small>
+                    {items.first_name+" "+items.last_name}
                   </Typography>
                   <Button
                     onClick={() => handleMoreButton(items)}
@@ -114,7 +85,7 @@ export default function Home() {
                     color="secondary"
                     size="small"
                   >
-                    More...
+                    Info
                   </Button>
                 </Grid>
               );

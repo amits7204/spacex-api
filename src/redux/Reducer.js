@@ -1,33 +1,51 @@
 import {
-  PAYLOAD_GET_REQUEST,
-  PAYLOAD_GET_SUCCESS,
-  PAYLOAD_GET_FAILURE,
+  CONTACTS_GET_REQUEST,
+  CONTACTS_GET_SUCCESS,
+  CONTACTS_GET_FAILURE,
+  CONTACTS_POST_REQUEST,
+  CONTACTS_POST_SUCCESS,
+  CONTACTS_POST_FAILURE,
 } from "../redux/ActionType";
 export const initstate = {
-  payloadData: [],
+  contactData: [],
   isError: true,
+  data: {}
 };
 
-const payloadReducer = (state = initstate, { type, payload }) => {
-  // console.log(payload)
+const contactReducer = (state = initstate, { type, payload }) => {
+  console.log("payload: ",payload)
   switch (type) {
-    case PAYLOAD_GET_REQUEST:
+    case CONTACTS_GET_REQUEST:
       return {
         ...state,
       };
-    case PAYLOAD_GET_SUCCESS:
+    case CONTACTS_GET_SUCCESS:
       return {
         ...state,
-        payloadData: payload,
+        contactData: payload,
         isError: false,
       };
-    case PAYLOAD_GET_FAILURE:
+    case CONTACTS_GET_FAILURE:
       return {
         ...state,
       };
+      case CONTACTS_POST_REQUEST:
+        return {
+          ...state,
+        };
+      case CONTACTS_POST_SUCCESS:
+        return {
+          ...state,
+          data: payload,
+          isError: false,
+        };
+      case CONTACTS_POST_FAILURE:
+        return {
+          ...state,
+        };  
     default:
       return state;
   }
 };
 
-export default payloadReducer;
+export default contactReducer;
